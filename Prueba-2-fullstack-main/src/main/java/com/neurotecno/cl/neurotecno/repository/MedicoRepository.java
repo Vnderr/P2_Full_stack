@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface MedicoRepository extends JpaRepository<Medico, Long>  {
     @Query(value="SELECT * FROM MEDICO  WHERE m.especialidad = ?1",nativeQuery = true)
-    List<Object[]> findInEspecialidad(String especialidad);
+    List<Object[]> findByEspecialidad(String especialidad);
 
 
 }

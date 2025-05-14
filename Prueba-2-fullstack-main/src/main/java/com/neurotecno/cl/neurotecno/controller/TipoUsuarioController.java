@@ -45,6 +45,7 @@ public class TipoUsuarioController {
 
     @PostMapping
     public ResponseEntity<TipoUsuario> guardar(@RequestBody TipoUsuario tipoUsuario) {
+        
         TipoUsuario tipoUsuario2 = tipousuarioService.guardarTipoUsuario(tipoUsuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(tipoUsuario2);
     }

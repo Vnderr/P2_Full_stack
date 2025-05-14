@@ -40,8 +40,7 @@ public class PacienteController {
 
     @PostMapping
     public ResponseEntity<Paciente> guardar(@RequestBody Paciente paciente) {
-        
-
+    
         Paciente pacienteNuevo = pacienteService.guardarPaciente(paciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteNuevo);
     }
