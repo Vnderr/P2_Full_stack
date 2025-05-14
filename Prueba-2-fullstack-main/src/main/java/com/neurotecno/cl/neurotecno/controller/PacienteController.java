@@ -1,10 +1,5 @@
 package com.neurotecno.cl.neurotecno.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import com.neurotecno.cl.neurotecno.model.Paciente;
-import com.neurotecno.cl.neurotecno.service.PacienteService;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.neurotecno.cl.neurotecno.model.Paciente;
+import com.neurotecno.cl.neurotecno.service.PacienteService;
 
 @RestController
 @RequestMapping("/api/v1/pacientes")
@@ -29,23 +28,20 @@ public class PacienteController {
     @GetMapping
     public ResponseEntity<List<Paciente>> listar(){
         List <Paciente> pacientes = pacienteService.obtenerPacientes();
-        if(pacientes.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }
+        if(pacientes.isEmpty()){return ResponseEntity.noContent().build();}
         return ResponseEntity.ok(pacientes);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Paciente> buscar(@PathVariable Long id){
-        try{
-            Paciente paciente = pacienteService.obtenerPacientePorId(id);
-            return ResponseEntity.ok(paciente);
-        }catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+        Paciente paciente = pacienteService.obtenerPacientePorId(id);
+        if (paciente == null)return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(paciente);
     }
 
     @PostMapping
     public ResponseEntity<Paciente> guardar(@RequestBody Paciente paciente) {
+        
+
         Paciente pacienteNuevo = pacienteService.guardarPaciente(paciente);
         return ResponseEntity.status(HttpStatus.CREATED).body(pacienteNuevo);
     }

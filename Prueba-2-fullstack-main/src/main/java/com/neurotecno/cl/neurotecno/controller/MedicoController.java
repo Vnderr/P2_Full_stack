@@ -35,12 +35,9 @@ public class MedicoController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<Medico> buscar(@PathVariable Long id) {
-        try {
-            Medico medico = medicoService.obtenerMedicoPorId( id);
-            return ResponseEntity.ok(medico);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        Medico medico = medicoService.obtenerMedicoPorId( id);
+        if (medico == null)return ResponseEntity.notFound().build();      
+        return ResponseEntity.ok(medico);
     }
 
     @PostMapping

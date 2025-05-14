@@ -34,15 +34,14 @@ public class TipoUsuarioController {
         return ResponseEntity.ok(tipoUsuarios);
     }
 
+    // no se porque usamos try si no tiran Execption cuando hay null :/
     @GetMapping("/{id}")
     public ResponseEntity<TipoUsuario> buscar(@PathVariable Long id){
-        try{
-            TipoUsuario tipoUsuario = tipousuarioService.obtenerTipoUsuarioPorId(id);
-            return ResponseEntity.ok(tipoUsuario);
-        }catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
-    }
+        TipoUsuario tipoUsuario = tipousuarioService.obtenerTipoUsuarioPorId(id);
+        if (tipoUsuario == null)return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(tipoUsuario);
+    }   
+    
 
     @PostMapping
     public ResponseEntity<TipoUsuario> guardar(@RequestBody TipoUsuario tipoUsuario) {

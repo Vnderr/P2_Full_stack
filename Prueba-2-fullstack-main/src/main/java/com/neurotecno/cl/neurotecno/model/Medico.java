@@ -31,4 +31,5 @@ public class Medico {
     
     @Column(nullable = false)
     private String jefeTurno;
+    
 }
