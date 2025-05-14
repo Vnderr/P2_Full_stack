@@ -26,7 +26,7 @@ public class AtencionController {
     @Autowired
     private AtencionService atencionService;
 
-        @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<Atencion>> listar() {
         List<Atencion> atenciones = atencionService.obtenerAtenciones();
         if (atenciones.isEmpty()) {
