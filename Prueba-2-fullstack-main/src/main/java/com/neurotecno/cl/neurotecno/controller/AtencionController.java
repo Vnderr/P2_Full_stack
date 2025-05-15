@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ public class AtencionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Atencion> buscarAtencionPorId(Long id) {
+    public ResponseEntity<Atencion> buscarAtencionPorId(@PathVariable Long id) {
         Atencion atencion = atencionService.obtenerAtencionPorId(id);
         if (atencion == null) {
             return ResponseEntity.notFound().build();
@@ -51,7 +52,7 @@ public class AtencionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Atencion> actualizar(Long id,@RequestBody Atencion atencion) {
+    public ResponseEntity<Atencion> actualizar(@PathVariable Long id,@RequestBody Atencion atencion) {
         Atencion atencionActualizada = atencionService.actualizarAtencion(id, atencion);
         if (atencionActualizada == null) {
             return ResponseEntity.notFound().build();
@@ -60,7 +61,7 @@ public class AtencionController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Atencion> patch(Long id,@RequestBody Atencion atencion) {
+    public ResponseEntity<Atencion> patch(@PathVariable Long id,@RequestBody Atencion atencion) {
         Atencion atencionActualizada = atencionService.editarAtencion(id, atencion);
         if (atencionActualizada == null) {
             return ResponseEntity.notFound().build();
@@ -69,11 +70,12 @@ public class AtencionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        System.out.println(id);
         atencionService.eliminarAtencion(id);
         return ResponseEntity.noContent().build();
     } 
-
+    //@GetMapping("Resumen")
 
 
 

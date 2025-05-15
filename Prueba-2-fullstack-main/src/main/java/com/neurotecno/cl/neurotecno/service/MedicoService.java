@@ -18,6 +18,10 @@ public class MedicoService {
     public Medico guardarMedico(Medico atencion) {return repository.save(atencion);}
     
     public void eliminarMedico(Long id) {repository.deleteById(id);}    
+    public List<Medico> obtenerPorEspecialidad(String especialidad) {
+        return repository.findByEspecialidad(especialidad);
+    }    
+
 
     public Medico actualizarMedico(Long id, Medico medico) {
         Medico medicoExistente = repository.findById(id).orElse(null);

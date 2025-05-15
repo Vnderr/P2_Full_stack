@@ -74,4 +74,10 @@ public class PacienteController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/resumen")
+    public ResponseEntity<List<Paciente>> resumen(){
+        return this.listar();
+    }
+
 }

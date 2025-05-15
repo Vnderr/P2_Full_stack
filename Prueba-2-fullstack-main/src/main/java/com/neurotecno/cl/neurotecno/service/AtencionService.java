@@ -1,6 +1,7 @@
 package com.neurotecno.cl.neurotecno.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class AtencionService {
             atencionExistente.setHoraAtencion(atencion.getHoraAtencion());
             atencionExistente.setPaciente(atencion.getPaciente());
             atencionExistente.setMedico(atencion.getMedico());
+            atencionExistente.setCosto(atencion.getCosto());
+            atencionExistente.setComentario(atencion.getComentario());
+            atencionExistente.setTipousuario(atencion.getTipousuario());
             return atencionRepository.save(atencionExistente);
         } else {
             return null;
@@ -47,6 +51,9 @@ public class AtencionService {
             if (atencion.getHoraAtencion() != null) atencionExistente.setHoraAtencion(atencion.getHoraAtencion());
             if (atencion.getPaciente() != null) atencionExistente.setPaciente(atencion.getPaciente());
             if (atencion.getMedico() != null) atencionExistente.setMedico(atencion.getMedico());
+            if (atencion.getCosto() != null)atencionExistente.setCosto(atencion.getCosto());
+            if (atencion.getComentario() != null)atencionExistente.setComentario(atencion.getComentario());
+            if (atencion.getTipousuario() != null)atencionExistente.setTipousuario(atencion.getTipousuario());
 
             return atencionRepository.save(atencionExistente);
         } else {
@@ -54,7 +61,22 @@ public class AtencionService {
         }
     }
 
-
+    public List<Atencion> obtenerAtencionesPorPacienteId(Long pacienteId) {
+        return atencionRepository.findByPacienteId(pacienteId);
+    }
+    public List<Atencion> obtenerAtencionesPorMedicoId(Long medicoId) {
+        return atencionRepository.findByMedicoId(medicoId);
+    }
+    public List<Atencion> obtenerAtencionesPorPacienteIdYMedicoId(Long pacienteId, Long medicoId) {
+        return atencionRepository.findByPacienteId(pacienteId).stream()
+                .filter(atencion -> atencion.getMedico().getId().equals(medicoId.intValue()))
+                .collect(Collectors.toList());
+    }
+    
+    public List<Atencion> obtenerAtencionesPorMedicoIdYPacienteId(Long medicoId, Long pacienteId) {
+        return obtenerAtencionesPorPacienteIdYMedicoId(pacienteId,medicoId);
+    }
+    
 
 
 
