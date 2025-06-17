@@ -1,9 +1,13 @@
 package com.neurotecno.cl.neurotecno.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,63 +35,86 @@ public class TipoUsuarioControllerV2 {
     private TipoUsuarioModelAssembler assembler;
 
     @GetMapping(produces = MediaTypes.HAL_FORMS_JSON_VALUE)
-    public ResponseEntity<CollectionModel<EntityModel<TipoUsuario>>> listar(){
-        List <EntityModel<TipoUsuario>> tipoUsuarios = tipousuarioService.obtenerTipoUsuarios().stream().map(assembler::toModel)
-        .collect(Collectors.toList());
+    public ResponseEntity<CollectionModel<EntityModel<TipoUsuario>>> getListarTipoUsuario(){
+        List <EntityModel<TipoUsuario>> tipoUsuarios = tipousuarioService.obtenerTipoUsuarios().stream()
+                  .map(assembler::toModel)
+                  .collect(Collectors.toList());
         if(tipoUsuarios.isEmpty()){
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(CollectionModel.of(
             tipoUsuarios,
-            linkTo(methodOn(TipoUsuarioControllerV2.class).listar()).withSelfRel()
+            linkTo(methodOn(TipoUsuarioControllerV2.class).getListarTipoUsuario()).withSelfRel()
         ));
     }
 
     @GetMapping(value = "/{id}", produces = MediaTypes.HAL_FORMS_JSON_VALUE)
-    public ResponseEntity<EntityModel<TipoUsuario>> buscar(@PathVariable Long id){
-        TipoUsuario tipoUsuario = tipousuarioService.obtenerTipoUsuarioPorId(id);
-        if (tipoUsuario == null) {
-        return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(assembler.toModel(tipoUsuario));
-    } 
+    public ResponseEntity<EntityModel<TipoUsuario>> getBuscarporID(@PathVariable Long id){
+        /*
+        * 
+        TipoUsuario tipoUsuario = TipoUsuarioService.obtenerTipoUsuarioPorId(id) {
+            if (tipoUsuario == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(assembler.toModel(tipoUsuario));
+        */
+        return null
+    }   
     
 
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<TipoUsuario>> guardar(@RequestBody TipoUsuario tipoUsuario) {
-        TipoUsuario nuevoTipoUsuario = tipousuarioService.guardarTipoUsuario(tipoUsuario);
+        TipoUsuario newTipoUsuario = tipousuarioService.guardarTipoUsuario(tipoUsuario);
         return ResponseEntity
-            .created(linkTo(methodOn(TipoUsuarioControllerV2.class).getBuscarporID(nuevoTipoUsuario.getId())).toUri()
+            .created(linkTo(methodOn(TipoUsuarioControllerV2.class).getBuscarporID(newTipoUsuario.getId())).toUri()
             .body(assembler.toModel(newTipoUsuario)));
     }
 
-    @PutMapping(value = "/{id}", produces = MediaTypes.HAL_FORMS_JSON_VALUE)
-    public ResponseEntity<EntityModel<TipoUsuario>> actualizar(@PathVariable Long id, @RequestBody TipoUsuario tipoUsuario){
-        tipoUsuario.setId(id);
-        TipoUsuario updateTipoUsuario = tipoUsuarioService.guardarTipoUsuario(tipoUsuario);
-        return ResponseEntity.ok(assembler.toModel(updateTipoUsuario));
-        
-    }
-
-    @PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<EntityModel<TipoUsuario>> patchTipoUsuario(@PathVariable Long id, @RequestBody TipoUsuario tipoUsuario) {
-        TipoUsuario actualizar = tipousuarioService.editarTipoUsuario(id, tipoUsuario);
-        if (updateTipoUsuario == null) {
-            return ResponseEntity.notFound().build();
-        }   
-        return ResponseEntity.ok(assembler.toModel(updateTipoUsuario));
-        
-    }
-    
-    @DeleteMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<Void> eliminar(@PathVariable Long id){
-        TipoUsuario tipoUsuario = tipousuarioService.obtenerTipoUsuarioPorId(id);
-        if (tipoUsuario == null ){
+    @PutMapping("/{id}")
+    public ResponseEntity<TipoUsuario> actualizar(@PathVariable Long id, @RequestBody TipoUsuario tipoUsuario){
+        try{
+            tipousuarioService.guardarTipoUsuario(tipoUsuario);
+            return ResponseEntity.ok(tipoUsuario);
+        }catch( Exception e){
             return ResponseEntity.notFound().build();
         }
-        tipousuarioService.eliminarTipoUsuario(id);
-        return ResponseEntity.noContent().build();
     }
 
-}
+    @PatchMapping("/{id}")
+    public ResponseEntity<TipoUsuario> patch(@PathVariable Long id, @RequestBody TipoUsuario tipoUsuarioExistente) {
+        try {
+            TipoUsuario actualizar = tipousuarioService.editarTipoUsuario(id, tipoUsuarioExistente);
+            return ResponseEntity.ok(actualizar);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id){
+        try{
+            tipousuarioService.eliminarTipoUsuario(id);
+            return ResponseEntity.noContent().build();
+        }catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

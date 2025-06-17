@@ -7,6 +7,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
@@ -53,11 +57,33 @@ public class PacienteServiceTest {
         assertEquals(1, paciente.getId());
     }
 
-    @Test
+   @Test
     public void testSave(){
         Paciente paciente = createPaciente();
         when(pacienteRepository.save(paciente)).thenReturn(paciente);
-        paciente savedPaciente =
+        Paciente savedPaciente = pacienteService.guardarPaciente(paciente);
+        assertNotNull(savedPaciente);
+        assertEquals("Pepe", savedPaciente.getNombres());
     }
 
+      @Test
+    public void testPatchPaciente(){
+        Paciente existePaciente = createPaciente();
+        Paciente patchData = new Paciente();
+        patchData.setNombres("Jose lopez");
+
+        when(pacienteRepository.findById(1L)).thenReturn(java.util.Optional.of(existePaciente));
+        when(pacienteRepository.save(any(Paciente.class))).thenReturn(existePaciente);
+
+        Paciente patchedPaciente = pacienteService.actualizarPaciente(1L, patchData);
+        assertNotNull(patchedPaciente);
+        assertEquals("Jose lopez", patchedPaciente.getNombres());
+    }
+
+    @Test
+    public void deleteById() {
+        doNothing().when(pacienteRepository).deleteById(1L);
+        pacienteService.eliminarPaciente(1L);
+        verify(pacienteRepository, times(1)).deleteById(1L);
+    }
 }
