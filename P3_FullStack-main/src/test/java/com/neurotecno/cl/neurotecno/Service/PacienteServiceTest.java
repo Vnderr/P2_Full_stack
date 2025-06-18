@@ -38,6 +38,7 @@ public class PacienteServiceTest {
         "lopez",
         new Date(),
         "p.lopez@gmail.com",
+        "12345Abcdef",
         new TipoUsuario());
     }
 

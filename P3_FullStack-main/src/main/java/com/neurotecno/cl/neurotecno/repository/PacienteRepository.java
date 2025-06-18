@@ -11,13 +11,11 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     Paciente findByCorreo(String correo);
     
     @Query(value="SELECT * FROM PACIENTE WHERE apellidos = ?1 ",nativeQuery=true)
-
     List<Paciente> findByApellidos(String apellidos);
 
     @Query(value="SELECT * FROM PACIENTE WHERE apellidos = ?1 and nombres = ?2 ",nativeQuery=true)
     List<Paciente> findByNombresAndApellidos(String nombres, String apellidos);
  
-
     @Query("SELECT p from Paciente p where p.tipo_usuario = ?1")
     List<Paciente> findByIdTipoUsuario(int TipoUsuario);
 

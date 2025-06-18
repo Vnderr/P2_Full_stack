@@ -14,7 +14,8 @@ public interface MedicoRepository extends JpaRepository<Medico, Long>  {
 
     
     // porque chucha m.[X] funciona si no esta definido como SELECT * FROM MEDICO m
-    // acaso eso o simplemente no funciona lol
+    // acaso eso o simplemente no funciona lol 
+    // query 1, ti
     @Query(value="SELECT * FROM MEDICO WHERE m.especialidad = ?1 AND m.jefe_turno = ?2",nativeQuery = true)
     List<Medico> findByJefeYEspecialidad(String especialidad,String jefe);
 

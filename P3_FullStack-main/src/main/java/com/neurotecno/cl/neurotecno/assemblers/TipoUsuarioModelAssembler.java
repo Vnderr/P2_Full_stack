@@ -15,6 +15,7 @@ public class TipoUsuarioModelAssembler implements RepresentationModelAssembler<T
     @Override
     public EntityModel<TipoUsuario> toModel(TipoUsuario tipoUsuario){
         return EntityModel.of(tipoUsuario,
-                linkTo(methodOn(TipoUsuarioControllerV2.class).getListarTipoUsuario()).withSelfRel());
+                linkTo(methodOn(TipoUsuarioControllerV2.class).listar()).withSelfRel());
     }
+
 }

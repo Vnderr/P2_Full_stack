@@ -50,4 +50,3 @@ public class Atencion {
     @Column(nullable = false)
     private String comentario;
 }
-// utilizar hash para la autenticacion

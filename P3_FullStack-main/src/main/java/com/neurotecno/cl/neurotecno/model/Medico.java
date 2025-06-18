@@ -26,6 +26,9 @@ public class Medico {
     @Column(nullable = false)
     private String nombreCompleto;
 
+    @Column (nullable = false)
+    private String contraseña;
+
     @Column(nullable = false)
     private String especialidad;
     

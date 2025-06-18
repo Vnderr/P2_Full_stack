@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -29,7 +31,14 @@ public class AtencionServiceTest {
     private AtencionRepository atencionRepository;
 
     private Atencion createAtencion() {
-        return new Atencion(2, null , null, 12000, new Paciente(), new Medico(), new TipoUsuario(), "Atencion Particular");
+        return new Atencion(1,        
+        LocalDate.of(2025, 6, 18), 
+        LocalTime.of(14, 30, 0),   
+        12000,                     
+        new Paciente(),             
+        new Medico(),               
+        new TipoUsuario(),          
+        "Atencion Particular" );
     }
 
     @Test

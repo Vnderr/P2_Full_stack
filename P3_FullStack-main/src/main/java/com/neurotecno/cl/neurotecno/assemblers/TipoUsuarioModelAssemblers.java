@@ -14,7 +14,12 @@ public class TipoUsuarioModelAssemblers implements RepresentationModelAssembler<
     @SuppressWarnings("null")
     @Override
     public EntityModel<TipoUsuario> toModel(TipoUsuario tipoUsuario){
+        /* no se me ocurre a que hacer link
         return EntityModel.of(tipoUsuario,
-                linkTo(methodOn(TipoUsuarioControllerV2.class).get))
+                linkTo(methodOn(TipoUsuarioControllerV2.class).));
+        */
+
+        return EntityModel.of(null);
+
     }
 }

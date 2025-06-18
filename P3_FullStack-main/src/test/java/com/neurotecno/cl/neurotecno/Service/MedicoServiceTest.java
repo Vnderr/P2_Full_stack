@@ -32,6 +32,7 @@ public class MedicoServiceTest {
         return new Medico(1, 
         "21456789-9", 
         "Jose Retamal", 
+        "123456Abcdef",
         "Psicologia infantil", 
         "Pedro Fuentes");
     }

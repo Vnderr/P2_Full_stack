@@ -42,6 +42,9 @@ public class Paciente {
     @Column(nullable = false)
     private String correo;
 
+    @Column (nullable = false)
+    private String contraseña;
+
     @ManyToOne(fetch = FetchType.LAZY,optional=false)
     @JoinColumn(name = "tipo_usuario", nullable = false)
     private TipoUsuario tipoUsuario;
