@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neurotecno.cl.neurotecno.model.Atencion;
+import com.neurotecno.cl.neurotecno.model.Paciente;
 import com.neurotecno.cl.neurotecno.repository.AtencionRepository;
 
 @Service
@@ -77,7 +78,12 @@ public class AtencionService {
         return obtenerAtencionesPorPacienteIdYMedicoId(pacienteId,medicoId);
     }
     
+   //eliminar por cascada
+   // public void deleteById(String id) {
+    //Atencion atencion = atencionRepository.findByPacienteId(id)
+    //.orElseThrow(() -> new RuntimeException("Atencion no encontrada"));
 
+   
 
 
 

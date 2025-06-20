@@ -15,7 +15,7 @@ import java.time.LocalTime;
 public interface AtencionRepository extends JpaRepository<Atencion, Long> {
 
     @Query(value="SELECT * FROM ATENCION WHERE paciente_id = ?1",nativeQuery = true)
-    List<Atencion> findByPacienteId(Long pacienteId);
+    List<Atencion> findByPacienteId(String id);
 
     @Query(value="SELECT * FROM ATENCION WHERE medico_id = ?1",nativeQuery = true)
     List<Atencion> findByMedicoId(Long medicoId);
@@ -29,7 +29,6 @@ public interface AtencionRepository extends JpaRepository<Atencion, Long> {
     
     @Query(value="SELECT * FROM ATENCION WHERE a.fecha_atencion = ?1 AND a.medico_id = ?2;",nativeQuery = true)
     List<Atencion> findByFechayMedicoId(LocalDate fechaAtencion,Long medicoId);
-
 
 
 
