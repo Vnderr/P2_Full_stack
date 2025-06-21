@@ -38,20 +38,18 @@ public class AtencionControllerV2 {
     @Autowired
     private AtencionModelAssembler assembler;
 
-    @GetMapping(produces = MediaTypes.HAL_FORMS_JSON_VALUE)
-    public ResponseEntity<CollectionModel<EntityModel<Atencion>>> listar(){
+    @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    public CollectionModel<EntityModel<Atencion>> listar(){
         atencionService.obtenerAtenciones().stream().map(assembler::toModel);
-
-        List <EntityModel<Atencion>> atenciones = atencionService.obtenerAtenciones().stream().map(assembler::toModel).collect(Collectors.toList());
+        List<EntityModel<Atencion>> atenciones = atencionService.obtenerAtenciones().stream()
+        .map(assembler::toModel)
+        .collect(Collectors.toList());
         
-        if(atenciones.isEmpty()){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(CollectionModel.of(
-            atenciones,
+        return CollectionModel.of(atenciones,
             linkTo(methodOn(TipoUsuarioControllerV2.class).listar()).withSelfRel()
-        ));
+        );
     }
+    
     @GetMapping(value = "/{id}", produces =MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Atencion>> buscarAtencionPorId(@PathVariable Long id) {
         Atencion atencion = atencionService.obtenerAtencionPorId(id);
@@ -61,22 +59,21 @@ public class AtencionControllerV2 {
         return ResponseEntity.ok(assembler.toModel(atencion));
     }
 
-
-    // no se si poner un guardar atencion no visible
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Atencion>> guardar(@RequestBody Atencion atencion) {
         Atencion nuevaAtencion = atencionService.guardarAtencion(atencion);
         return ResponseEntity
-                .created(linkTo(methodOn(AtencionControllerV2.class).guardarAtencion(nuevaAtencion.getId())).toUri())
+                .created(linkTo(methodOn(AtencionControllerV2.class).guardarAtencion(Long.valueOf(nuevaAtencion.getId()))).toUri())
                 .body(assembler.toModel(nuevaAtencion));
     }
 
     @PutMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Atencion>> actualizarAtencion (@PathVariable Long id,@RequestBody Atencion atencion) {
-        Atencion atencionActualizada = atencionService.actualizarAtencion(id, atencion);
-        //atencion.setId(id);
-        
-        atencion.setId((Integer)id);
+        atencion.setId(id.intValue());
+        Atencion atencionActualizada = atencionService.guardarAtencion(atencion);
+        if(atencionActualizada == null){
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(assembler.toModel(atencionActualizada));
     }
 

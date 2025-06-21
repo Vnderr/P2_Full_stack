@@ -35,17 +35,14 @@ public class MedicoControllerV2 {
     private MedicoModelAssembler assembler;
 
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<CollectionModel<EntityModel<Medico>>> listar() {
+    public CollectionModel<EntityModel<Medico>> listar() {
         List<EntityModel<Medico>> medicos = medicoService.obtenerMedicos().stream()
-        .map(assembler::toModel)
-        .collect(Collectors.toList());
-        if (medicos.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(CollectionModel.of(
-                medicos,
+            .map(assembler::toModel)
+            .collect(Collectors.toList());
+        
+        return CollectionModel.of(medicos,
                 linkTo(methodOn(MedicoControllerV2.class).listar()).withSelfRel()
-        ));
+        );
     }
     @GetMapping(value ="/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Medico>> buscar(@PathVariable Long id) {
@@ -59,14 +56,17 @@ public class MedicoControllerV2 {
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Medico>> guardar(@RequestBody Medico medico) {
         Medico medicoNuevo = medicoService.guardarMedico(medico);
-        return ResponseEntity.created(linkTo(methodOn(MedicoControllerV2.class).guardar(medicoNuevo.getId())).toUri())
+        return ResponseEntity.created(linkTo(methodOn(MedicoControllerV2.class).guardar(Long.valueOf(medicoNuevo.getId()))).toUri())
                 .body(assembler.toModel(medicoNuevo));
     }
 
     @PutMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Medico>> actualizar(@PathVariable Long id, @RequestBody Medico medico) {
-        medico.setId(id);
-        Medico medicoActualizado = medicoService.actualizarMedico(id, medico);
+        medico.setId(id.intValue());
+        Medico medicoActualizado = medicoService.guardarMedico(medico);
+        if(medicoActualizado == null){
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(assembler.toModel(medicoActualizado));
         
     }
