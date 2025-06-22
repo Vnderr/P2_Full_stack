@@ -3,10 +3,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-
+import com.neurotecno.cl.neurotecno.model.Atencion;
 import com.neurotecno.cl.neurotecno.model.Paciente;
+import com.neurotecno.cl.neurotecno.model.TipoUsuario;
 import com.neurotecno.cl.neurotecno.repository.AtencionRepository;
 import com.neurotecno.cl.neurotecno.repository.PacienteRepository;
+
 
 @Service
 public class PacienteService {
@@ -17,11 +19,14 @@ public class PacienteService {
     @Autowired
     private AtencionRepository atencionRepository;
 
+
     public List<Paciente> obtenerPacientes() {return pacienterepository.findAll(); }
     
     public Paciente obtenerPacientePorId(Long id) {return pacienterepository.findById(id).orElse(null);}
 
-    public Paciente guardarPaciente(Paciente atencion) {return pacienterepository.save(atencion);}
+    public Paciente guardarPaciente(Paciente paciente) {
+        return pacienterepository.save(paciente);
+        }
     
     public void eliminarPaciente(Long id) {pacienterepository.deleteById(id);}    
 
@@ -54,6 +59,14 @@ public class PacienteService {
             return null;
         }
     }
+
+    //public List<Paciente> findByAtencion (Atencion atencion) {
+    //    return pacienterepository.findByAtencion(atencion);
+    //}
+
+    //public List<Paciente> findByTipoUsuario (TipoUsuario tipoUsuario) {
+      //  return pacienterepository.findByTipoUsuario(tipoUsuario) ;
+    //}
 
     public void  deleteById(Long id) {
     Paciente paciente = pacienterepository.findById(id)

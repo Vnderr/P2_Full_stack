@@ -95,7 +95,7 @@ public class AtencionService {
     
 
    //eliminar por cascada
-   public void deleteById(Long id) {
+  /* public void deleteById(Long id) {
     Atencion atencion = atencionRepository.findById(id)
     .orElseThrow(() -> new RuntimeException("Atencion no encontrada"));
 
@@ -113,7 +113,8 @@ public class AtencionService {
 
    atencionRepository.delete(atencion);
 
-    }
+    }*/
+    
 
 
 

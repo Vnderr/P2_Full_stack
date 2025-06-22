@@ -1,8 +1,11 @@
 package com.neurotecno.cl.neurotecno.repository;
 import com.neurotecno.cl.neurotecno.model.Atencion;
 import com.neurotecno.cl.neurotecno.model.Paciente;
+import com.neurotecno.cl.neurotecno.model.TipoUsuario;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -17,10 +20,13 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     @Query(value="SELECT * FROM PACIENTE WHERE apellidos = ?1 and nombres = ?2 ",nativeQuery=true)
     List<Paciente> findByNombresAndApellidos(String nombres, String apellidos);
  
-    @Query("SELECT p from Paciente p where p.tipo_usuario = ?1")
-    List<Paciente> findByIdTipoUsuario(int TipoUsuario);
+    //@Query("SELECT * from Paciente p where p.tipo_usuario = ?1")
+    // List<Paciente> findByTipoUsuario(TipoUsuario tipoUsuario); 
 
-    List<Paciente> findByAtencion(Atencion atencion);
+    //@Query("SELECT * FROM Paciente p JOIN p.atenciones a WHERE a = :atencion")
+     //List<Paciente> findByAtencion(@Param("atencion") Atencion atencion);
+
+    //List<Paciente> findByAtencion(Atencion atencion);
 }
 
 // t,

@@ -24,9 +24,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/pacientes")
+@Tag(name = "Pacientes", description = "Operaciones relacionadas con los pacientes")
 public class PacienteController {
 
     @Autowired
