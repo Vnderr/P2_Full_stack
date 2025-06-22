@@ -18,9 +18,9 @@ public class MedicoModelAssembler implements RepresentationModelAssembler<Medico
     return EntityModel.of(medico,
             linkTo(methodOn(MedicoControllerV2.class).buscar(Long.valueOf(medico.getId()))).withSelfRel(),
             linkTo(methodOn(MedicoControllerV2.class).listar()).withRel("Medicos"),
-            linkTo(methodOn(MedicoControllerV2.class).actualizar(Long.valueOf(medico.getId()))).withRel("Actualizar"),
+            linkTo(methodOn(MedicoControllerV2.class).actualizar(Long.valueOf(medico.getId()),medico)).withRel("Actualizar"),
             linkTo(methodOn(MedicoControllerV2.class).eliminar(Long.valueOf(medico.getId()))).withRel("Eliminar"),
-            linkTo(methodOn(MedicoControllerV2.class).patchMedico(Long.valueOf(medico.getId()))).withRel("actualizar-parcial")
+            linkTo(methodOn(MedicoControllerV2.class).patchMedico(Long.valueOf(medico.getId()),medico)).withRel("actualizar-parcial")
     );
         
     }

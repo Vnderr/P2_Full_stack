@@ -8,7 +8,7 @@ import com.neurotecno.cl.neurotecno.model.Paciente;
 
 import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
-import java.time.LocalTime;
+
 
 
 
@@ -27,7 +27,7 @@ public interface AtencionRepository extends JpaRepository<Atencion, Long> {
 
     // TODO querys
     
-    List<Atencion> findByFechayHoraAtencion(LocalDate fechaAtencion, LocalTime horaAtencion);
+    List<Atencion> findByFechaAtencion(LocalDate fechaAtencion);
     
     
     @Query(value="SELECT * FROM ATENCION WHERE a.fecha_atencion = ?1 AND a.medico_id = ?2;",nativeQuery = true)

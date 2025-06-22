@@ -17,9 +17,9 @@ public class PacienteModelAssembler implements RepresentationModelAssembler<Paci
     return EntityModel.of(paciente,
             linkTo(methodOn(PacienteControllerV2.class).buscar(Long.valueOf(paciente.getId()))).withSelfRel(),
             linkTo(methodOn(PacienteControllerV2.class).listar()).withRel("Pacientes"),
-            linkTo(methodOn(PacienteControllerV2.class).actualizar(Long.valueOf(paciente.getId()))).withRel("Actualizar"),
+            linkTo(methodOn(PacienteControllerV2.class).actualizar(Long.valueOf(paciente.getId()),paciente)).withRel("Actualizar"),
             linkTo(methodOn(PacienteControllerV2.class).eliminar(Long.valueOf(paciente.getId()))).withRel("Eliminar"),
-            linkTo(methodOn(PacienteControllerV2.class).patchPaciente(Long.valueOf(paciente.getId()))).withRel("actualizar-parcial")
+            linkTo(methodOn(PacienteControllerV2.class).patchPaciente(Long.valueOf(paciente.getId()),paciente)).withRel("actualizar-parcial")
     );
         
     }

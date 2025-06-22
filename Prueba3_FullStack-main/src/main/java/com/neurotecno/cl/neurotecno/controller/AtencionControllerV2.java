@@ -1,10 +1,9 @@
 package com.neurotecno.cl.neurotecno.controller;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.apache.tomcat.util.http.parser.MediaType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -23,7 +22,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import com.neurotecno.cl.neurotecno.assemblers.AtencionModelAssembler;
 import com.neurotecno.cl.neurotecno.model.Atencion;
-import com.neurotecno.cl.neurotecno.model.TipoUsuario;
 import com.neurotecno.cl.neurotecno.service.AtencionService;
 
 
@@ -63,7 +61,7 @@ public class AtencionControllerV2 {
     public ResponseEntity<EntityModel<Atencion>> guardar(@RequestBody Atencion atencion) {
         Atencion nuevaAtencion = atencionService.guardarAtencion(atencion);
         return ResponseEntity
-                .created(linkTo(methodOn(AtencionControllerV2.class).guardarAtencion(Long.valueOf(nuevaAtencion.getId()))).toUri())
+                .created(linkTo(methodOn(AtencionControllerV2.class).buscarAtencionPorId((long)(nuevaAtencion.getId()))).toUri())
                 .body(assembler.toModel(nuevaAtencion));
     }
 

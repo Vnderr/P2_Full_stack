@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TipoUsuarioRepository extends JpaRepository<TipoUsuario, Long> {
 
-    @Query(value="")
+   // @Query(value="")
     
 
     

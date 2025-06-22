@@ -17,9 +17,9 @@ public class AtencionModelAssembler implements RepresentationModelAssembler<Aten
         return EntityModel.of(atencion,
             linkTo(methodOn(AtencionControllerV2.class).buscarAtencionPorId(Long.valueOf(atencion.getId()))).withSelfRel(),
             linkTo(methodOn(AtencionControllerV2.class).listar()).withRel("Atenciones"),
-            linkTo(methodOn(AtencionControllerV2.class).actualizarAtencion(Long.valueOf(atencion.getId()))).withRel("Actualizar"),
+            linkTo(methodOn(AtencionControllerV2.class).actualizarAtencion(Long.valueOf(atencion.getId()),atencion)).withRel("Actualizar"),
             linkTo(methodOn(AtencionControllerV2.class).eliminar(Long.valueOf(atencion.getId()))).withRel("Eliminar"),
-            linkTo(methodOn(AtencionControllerV2.class).patchAtencion(Long.valueOf(atencion.getId()))).withRel("actualizar-parcial"));
+            linkTo(methodOn(AtencionControllerV2.class).patchAtencion(Long.valueOf(atencion.getId()),atencion)).withRel("actualizar-parcial"));
         
     }
 

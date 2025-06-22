@@ -18,9 +18,9 @@ public class TipoUsuarioModelAssembler implements RepresentationModelAssembler<T
         return EntityModel.of(tipoUsuario,
             linkTo(methodOn(TipoUsuarioControllerV2.class).buscar(Long.valueOf(tipoUsuario.getId()))).withSelfRel(),
             linkTo(methodOn(TipoUsuarioControllerV2.class).listar()).withRel("Tipos de usuarios"),
-            linkTo(methodOn(TipoUsuarioControllerV2.class).actualizar(Long.valueOf(tipoUsuario.getId()))).withRel("Actualizar"),
+            linkTo(methodOn(TipoUsuarioControllerV2.class).actualizar(Long.valueOf(tipoUsuario.getId()),tipoUsuario)).withRel("Actualizar"),
             linkTo(methodOn(TipoUsuarioControllerV2.class).eliminar(Long.valueOf(tipoUsuario.getId()))).withRel("Eliminar"),
-            linkTo(methodOn(TipoUsuarioControllerV2.class).patchtipoUsuario(Long.valueOf(tipoUsuario.getId()))).withRel("actualizar-parcial"));
+            linkTo(methodOn(TipoUsuarioControllerV2.class).patchTipoUsuario(Long.valueOf(tipoUsuario.getId()),tipoUsuario)).withRel("actualizar-parcial"));
     }
 
 }

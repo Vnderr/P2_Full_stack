@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,7 +56,7 @@ public class PacienteControllerV2 {
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Paciente>> guardar(@RequestBody Paciente paciente) {
         Paciente pacienteNuevo = pacienteService.guardarPaciente(paciente);
-        return ResponseEntity.created(linkTo(methodOn(PacienteControllerV2.class).guardar(Long.valueOf(pacienteNuevo.getId()))).toUri())
+        return ResponseEntity.created(linkTo(methodOn(PacienteControllerV2.class).buscar((long)(pacienteNuevo.getId()))).toUri())
                 .body(assembler.toModel(pacienteNuevo));
     }
 

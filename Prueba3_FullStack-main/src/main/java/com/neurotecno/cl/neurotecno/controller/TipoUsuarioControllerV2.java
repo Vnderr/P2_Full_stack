@@ -3,7 +3,6 @@ package com.neurotecno.cl.neurotecno.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -59,14 +58,14 @@ public class TipoUsuarioControllerV2 {
     public ResponseEntity<EntityModel<TipoUsuario>> guardar(@RequestBody TipoUsuario tipoUsuario) {
         TipoUsuario nuevoTipoUsuario = tipousuarioService.guardarTipoUsuario(tipoUsuario);
         return ResponseEntity
-            .created(linkTo(methodOn(TipoUsuarioControllerV2.class).guardar(Long.valueOf(nuevoTipoUsuario.getId()))).toUri())
+            .created(linkTo(methodOn(TipoUsuarioControllerV2.class).buscar((long)(nuevoTipoUsuario.getId()))).toUri())
             .body(assembler.toModel(nuevoTipoUsuario));
     }
 
     @PutMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<TipoUsuario>> actualizar(@PathVariable Long id, @RequestBody TipoUsuario tipoUsuario){
         tipoUsuario.setId(id.intValue());
-        TipoUsuario updateTipoUsuario = TipoUsuarioService.guardarTipoUsuario(tipoUsuario);
+        TipoUsuario updateTipoUsuario = tipousuarioService.guardarTipoUsuario(tipoUsuario);
         if(updateTipoUsuario == null){
             return ResponseEntity.notFound().build();
         }
@@ -77,10 +76,10 @@ public class TipoUsuarioControllerV2 {
     @PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<TipoUsuario>> patchTipoUsuario(@PathVariable Long id, @RequestBody TipoUsuario tipoUsuario) {
         TipoUsuario actualizar = tipousuarioService.editarTipoUsuario(id, tipoUsuario);
-        if (actualizarTipoUsuario == null) {
+        if (actualizar == null) {
             return ResponseEntity.notFound().build();
         }   
-        return ResponseEntity.ok(assembler.toModel(updateTipoUsuario));
+        return ResponseEntity.ok(assembler.toModel(actualizar));
         
     }
     
