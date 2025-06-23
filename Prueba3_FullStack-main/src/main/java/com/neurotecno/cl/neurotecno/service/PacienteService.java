@@ -60,13 +60,13 @@ public class PacienteService {
         }
     }
 
-    //public List<Paciente> findByAtencion (Atencion atencion) {
-    //    return pacienterepository.findByAtencion(atencion);
-    //}
+    public List<Paciente> findByAtencion (Atencion atencion) {
+        return pacienterepository.findByAtencionID(atencion.getId());
+    }
 
-    //public List<Paciente> findByTipoUsuario (TipoUsuario tipoUsuario) {
-      //  return pacienterepository.findByTipoUsuario(tipoUsuario) ;
-    //}
+    public List<Paciente> findByTipoUsuario (TipoUsuario tipoUsuario) {
+        return pacienterepository.findByTipoUsuario(tipoUsuario) ;
+    }
 
     public void  deleteById(Long id) {
     Paciente paciente = pacienterepository.findById(id)

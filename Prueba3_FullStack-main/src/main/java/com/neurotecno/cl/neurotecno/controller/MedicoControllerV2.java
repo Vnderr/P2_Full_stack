@@ -116,8 +116,8 @@ public class MedicoControllerV2 {
         Medico medico = medicoService.obtenerMedicoPorId(id);
         if (medico == null) {
             return ResponseEntity.notFound().build();
-        } 
+        }
         medicoService.eliminarMedico(id);
         return ResponseEntity.noContent().build();
-        }
     }
+}

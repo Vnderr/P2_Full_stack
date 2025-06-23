@@ -19,14 +19,16 @@ import com.neurotecno.cl.neurotecno.model.Paciente;
 @Repository
 public interface AtencionRepository extends JpaRepository<Atencion, Long> {
 
-    @Query(value="SELECT * FROM ATENCION WHERE paciente_id = ?1",nativeQuery = true)
     List<Atencion> findByPacienteId(Long pacienteId);
 
-    @Query(value="SELECT * FROM ATENCION WHERE medico_id = ?1",nativeQuery = true)
     List<Atencion> findByMedicoId(Long medicoId);
 
-    @Query(value="SELECT * FROM ATENCION WHERE a.fecha_atencion = ?1 AND a.hora_atencion = ?2;",nativeQuery = true)
-    List<Atencion> findByFechaAtencion(LocalDate fechaAtencion, LocalTime horaAtencion);
+
+    List<Atencion> findByPacienteIdAndMedicoId(Long medicoId,Long pacienteId);
+
+
+    //@Query(value="SELECT * FROM ATENCION WHERE a.fecha_atencion = ?1 AND a.hora_atencion = ?2;",nativeQuery = true)
+    List<Atencion> findByFechaAtencionAndHoraAtencion(LocalDate fechaAtencion, LocalTime horaAtencion);
     
     
     @Query(value="SELECT * FROM ATENCION WHERE a.fecha_atencion = ?1 AND a.medico_id = ?2;",nativeQuery = true)

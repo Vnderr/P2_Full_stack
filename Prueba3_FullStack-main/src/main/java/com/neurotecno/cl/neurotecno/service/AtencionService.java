@@ -1,5 +1,7 @@
 package com.neurotecno.cl.neurotecno.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +79,7 @@ public class AtencionService {
         }
     }
 
+
     public List<Atencion> obtenerAtencionesPorPacienteId(Long pacienteId) {
         return atencionRepository.findByPacienteId(pacienteId);
     }
@@ -84,18 +87,21 @@ public class AtencionService {
         return atencionRepository.findByMedicoId(medicoId);
     }
     public List<Atencion> obtenerAtencionesPorPacienteIdYMedicoId(Long pacienteId, Long medicoId) {
-        return atencionRepository.findByPacienteId(pacienteId).stream()
-                .filter(atencion -> atencion.getMedico().getId().equals(medicoId.intValue()))
-                .collect(Collectors.toList());
+        return atencionRepository.findByPacienteIdAndMedicoId(pacienteId,medicoId);
     }
-    
-    public List<Atencion> obtenerAtencionesPorMedicoIdYPacienteId(Long medicoId, Long pacienteId) {
-        return obtenerAtencionesPorPacienteIdYMedicoId(pacienteId,medicoId);
+
+    public List<Atencion> obtenerAtencionesPorFechayHora(LocalDate fechaAtencion, LocalTime horaAtencion) {
+        return atencionRepository.findByFechaAtencionAndHoraAtencion(fechaAtencion,horaAtencion);
     }
-    
+    public List<Atencion> obtenerAtencionesPorFechayMedicoID(LocalDate fechaAtencion, Long medicoId) {
+        return atencionRepository.findByFechayMedicoId(fechaAtencion,medicoId);
+    }
+
+
+
 
    //eliminar por cascada
-  /* public void deleteById(Long id) {
+  public void deleteById(Long id) {
     Atencion atencion = atencionRepository.findById(id)
     .orElseThrow(() -> new RuntimeException("Atencion no encontrada"));
 
@@ -106,15 +112,13 @@ public class AtencionService {
             pacienteService.deleteById(Long.valueOf(paciente.getId()));
         }
 
-     
+
     for (Medico medico : medicos) {
-            medicoService.deleteById(Long.valueOf(medico.getId()));   
-   }
+            medicoService.deleteById(Long.valueOf(medico.getId()));
+    }
 
-   atencionRepository.delete(atencion);
-
-    }*/
-    
+    atencionRepository.delete(atencion);
+    }
 
 
 

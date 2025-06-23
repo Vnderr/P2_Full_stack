@@ -53,6 +53,11 @@ public class MedicoService {
         }
     }
 
+    public List<Medico>  obtenerPorIdAtencion(Long id) {return medicoRepository.findByAtencionID(id);}
+    public List<Medico> findByEspecialidad(String especialidad){return medicoRepository.findByEspecialidad(especialidad);}
+    public List<Medico> findByJefeTurnoAndEspecialidad(String especialidad,String jefe){return findByJefeTurnoAndEspecialidad(especialidad,jefe) ;}
+
+
     public void  deleteById(Long id) {
         Medico medico = medicoRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Medico no encontrado"));

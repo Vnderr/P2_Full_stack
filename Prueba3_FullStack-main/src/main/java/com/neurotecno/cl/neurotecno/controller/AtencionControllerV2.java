@@ -124,6 +124,9 @@ public class AtencionControllerV2 {
         }
         atencionService.eliminarAtencion(id);
         return ResponseEntity.noContent().build();
-    } 
+    }
+
+
+
 
 }
