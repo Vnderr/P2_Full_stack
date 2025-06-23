@@ -99,8 +99,8 @@ public class AtencionService {
     Atencion atencion = atencionRepository.findById(id)
     .orElseThrow(() -> new RuntimeException("Atencion no encontrada"));
 
-    List<Paciente> pacientes  =  pacienteRepository.findByAtencion(atencion);
-    List<Medico> medicos  =  medicoRepository.findByAtencion(atencion);
+    List<Paciente> pacientes  =  pacienteRepository.findByAtencionID(atencion.getId());
+    List<Medico> medicos  =  medicoRepository.findByAtencionID(atencion.getId());
 
     for (Paciente paciente : pacientes) {
             pacienteService.deleteById(Long.valueOf(paciente.getId()));

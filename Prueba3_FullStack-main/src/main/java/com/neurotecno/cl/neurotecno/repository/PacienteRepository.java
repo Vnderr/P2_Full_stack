@@ -1,26 +1,27 @@
 package com.neurotecno.cl.neurotecno.repository;
-import com.neurotecno.cl.neurotecno.model.Atencion;
-import com.neurotecno.cl.neurotecno.model.Paciente;
+import java.util.List;
+
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+
+import com.neurotecno.cl.neurotecno.model.Paciente;
+import com.neurotecno.cl.neurotecno.model.TipoUsuario;
+
+
 
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
-    @Query("SELECT p FROM Paciente p where p.correo = ?1")
     Paciente findByCorreo(String correo);
-    
-    @Query(value="SELECT * FROM PACIENTE WHERE apellidos = ?1 ",nativeQuery=true)
     List<Paciente> findByApellidos(String apellidos);
-
-    @Query(value="SELECT * FROM PACIENTE WHERE apellidos = ?1 and nombres = ?2 ",nativeQuery=true)
     List<Paciente> findByNombresAndApellidos(String nombres, String apellidos);
- 
-    @Query("SELECT p from Paciente p where p.tipo_usuario = ?1")
-    List<Paciente> findByIdTipoUsuario(int TipoUsuario);
 
-    List<Paciente> findByAtencion(Atencion atencion);
+    List<Paciente> findByTipoUsuario(TipoUsuario tipoUsuario);
+
+    @Query(value="SELECT * FROM PACIENTE WHERE id IN (SELECT paciente_id FROM atencion WHERE atencion.id = ?1);",nativeQuery = true)
+    List<Paciente> findByAtencionID(long atencionID);
+
 }
 
 // t,

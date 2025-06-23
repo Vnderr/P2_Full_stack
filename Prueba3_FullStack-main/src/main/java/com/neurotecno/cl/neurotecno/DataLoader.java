@@ -42,7 +42,10 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-     
+        
+        System.out.println("oye porque el datafaker tiene un modulo de touhou?? "+faker.touhou().gameName()+" faker.touhou().gameName() ._.");
+        
+
         for (int i = 0; i < 3; i++) {
             TipoUsuario tipo = new TipoUsuario();
             tipo.setNombre(faker.job().position());
