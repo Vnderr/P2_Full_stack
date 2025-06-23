@@ -15,8 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neurotecno.cl.neurotecno.model.Medico;
 import com.neurotecno.cl.neurotecno.model.TipoUsuario;
 import com.neurotecno.cl.neurotecno.service.TipoUsuarioService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/api/v1/tipousuario")
@@ -26,6 +33,7 @@ public class TipoUsuarioController {
     private TipoUsuarioService tipousuarioService;
 
     @GetMapping
+    @Operation(summary = "Obtener todos los tipos de usuarios", description = "Obtener una lista de todos los tipos de usuarios")
     public ResponseEntity<List<TipoUsuario>> listar(){
         List <TipoUsuario> tipoUsuarios = tipousuarioService.obtenerTipoUsuarios();
         if(tipoUsuarios.isEmpty()){
@@ -34,8 +42,13 @@ public class TipoUsuarioController {
         return ResponseEntity.ok(tipoUsuarios);
     }
 
-    // no se porque usamos try si no tiran Execption cuando hay null :/
+    
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar un tipo de usuario", description = "Buscar un tipo de usuario existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Tipo de usuario encontrado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Tipo de usuario no encontrado")
+    })
     public ResponseEntity<TipoUsuario> buscar(@PathVariable Long id){
         TipoUsuario tipoUsuario = tipousuarioService.obtenerTipoUsuarioPorId(id);
         if (tipoUsuario == null)return ResponseEntity.notFound().build();
@@ -44,13 +57,25 @@ public class TipoUsuarioController {
     
 
     @PostMapping
-    public ResponseEntity<TipoUsuario> guardar(@RequestBody TipoUsuario tipoUsuario) {
+    @Operation(summary = "Crear un tipo de usuario", description = "Actualizar un tipo de usuario existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Tipo de usuario actualizado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Tipo de usuario no encontrado")
+    })
+    public ResponseEntity<TipoUsuario> crearTipoUsuario(@RequestBody TipoUsuario tipoUsuario) {
         
         TipoUsuario tipoUsuario2 = tipousuarioService.guardarTipoUsuario(tipoUsuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(tipoUsuario2);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un Tipo de usuario", description = "Actualizar un tipo de usuario existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Tipo de usuario actualizado exitosamente",
+                        content = @Content(mediaType = "aplication/json",
+                                schema = @Schema(implementation = Medico.class))),
+            @ApiResponse(responseCode = "404", description = "Tipo de usuario no encontrado")
+    })
     public ResponseEntity<TipoUsuario> actualizar(@PathVariable Long id, @RequestBody TipoUsuario tipoUsuario){
         try{
             tipousuarioService.guardarTipoUsuario(tipoUsuario);
@@ -61,6 +86,13 @@ public class TipoUsuarioController {
     }
 
     @PatchMapping("/{id}")
+    @Operation(summary = "Actualizar parcialmente un tipo de usuario", description = "Actualizar especificamente un tipo de usuario existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Tipo de usuario actualizado exitosamente",
+                        content = @Content(mediaType = "aplication/json",
+                                schema = @Schema(implementation = Medico.class))),
+            @ApiResponse(responseCode = "404", description = "Tipo de usuario no encontrado")
+    })
     public ResponseEntity<TipoUsuario> patch(@PathVariable Long id, @RequestBody TipoUsuario tipoUsuarioExistente) {
         try {
             TipoUsuario actualizar = tipousuarioService.editarTipoUsuario(id, tipoUsuarioExistente);
@@ -71,6 +103,11 @@ public class TipoUsuarioController {
     }
     
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un tipo de usuario", description = "Eliminar un tipo de usuario existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Tipo de usuario eliminado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Tipo de usuario no encontrado")
+    })
     public ResponseEntity<?> eliminar(@PathVariable Long id){
         try{
             tipousuarioService.eliminarTipoUsuario(id);

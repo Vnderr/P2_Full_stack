@@ -2,6 +2,7 @@ package com.neurotecno.cl.neurotecno.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,7 @@ public class Paciente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true, length = 10, nullable = false)
+    @Column(unique = true, length = 15, nullable = false)
     private String run;
 
     @Column(nullable = false)
@@ -42,12 +43,15 @@ public class Paciente {
     @Column(nullable = false)
     private String correo;
 
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column (nullable = false)
     private String contraseña;
 
     @ManyToOne(fetch = FetchType.LAZY,optional=false)
     @JoinColumn(name = "tipo_usuario", nullable = false)
     private TipoUsuario tipoUsuario;
+
 
 
 }

@@ -20,11 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import com.neurotecno.cl.neurotecno.assemblers.PacienteModelAssembler;
+import com.neurotecno.cl.neurotecno.model.Medico;
 import com.neurotecno.cl.neurotecno.model.Paciente;
 import com.neurotecno.cl.neurotecno.service.PacienteService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v2/pacientes")
+@Tag(name = "Pacientes", description = "Operaciones relacionadas con los pacientes")
 public class PacienteControllerV2 {
 
     @Autowired
@@ -34,6 +43,7 @@ public class PacienteControllerV2 {
     private PacienteModelAssembler assembler;
     
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Obtener todos los pacientes", description = "Obtener una lista de todos los pacientes")
     public CollectionModel<EntityModel<Paciente>> listar(){
         List<EntityModel<Paciente>> pacientes = pacienteService.obtenerPacientes().stream()
                 .map(assembler::toModel)
@@ -45,6 +55,11 @@ public class PacienteControllerV2 {
     }
 
     @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Buscar paciente", description = "Buscar un paciente existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Paciente encontrado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Paciente no encontrado")
+    })
     public ResponseEntity<EntityModel<Paciente>> buscar(@PathVariable Long id){
         Paciente paciente = pacienteService.obtenerPacientePorId(id);
         if (paciente == null){
@@ -54,13 +69,25 @@ public class PacienteControllerV2 {
     }
 
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<EntityModel<Paciente>> guardar(@RequestBody Paciente paciente) {
+    @Operation(summary = "Crear paciente", description = "Crear paciente inexistente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Paciente creado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Paciente no encontrado")
+    })
+    public ResponseEntity<EntityModel<Paciente>> crearPaciente(@RequestBody Paciente paciente) {
         Paciente pacienteNuevo = pacienteService.guardarPaciente(paciente);
         return ResponseEntity.created(linkTo(methodOn(PacienteControllerV2.class).buscar((long)(pacienteNuevo.getId()))).toUri())
                 .body(assembler.toModel(pacienteNuevo));
     }
 
     @PutMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Actualizar un paciente", description = "Actualizar un paciente existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Paciente actualizado exitosamente",
+                        content = @Content(mediaType = "aplication/json",
+                                schema = @Schema(implementation = Medico.class))),
+            @ApiResponse(responseCode = "404", description = "Paciente no encontrado")
+    })
     public ResponseEntity<EntityModel<Paciente>> actualizar(@PathVariable Long id, @RequestBody Paciente paciente){
         paciente.setId(id.intValue());
         Paciente updatePaciente = pacienteService.guardarPaciente(paciente);
@@ -72,6 +99,13 @@ public class PacienteControllerV2 {
     }
 
     @PatchMapping(value = "/{id}")
+    @Operation(summary = "Actualizar parcialmente un paciente", description = "Actualizar especificamente un paciente existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Paciente actualizado exitosamente",
+                        content = @Content(mediaType = "aplication/json",
+                                schema = @Schema(implementation = Medico.class))),
+            @ApiResponse(responseCode = "404", description = "Paciente no encontrado")
+    })
     public ResponseEntity<EntityModel<Paciente>> patchPaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
             Paciente updatedPaciente = pacienteService.actualizarPaciente(id, paciente);
             if (updatedPaciente == null) {
@@ -81,6 +115,11 @@ public class PacienteControllerV2 {
     }
     
     @DeleteMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Eliminar un paciente", description = "Eliminar un paciente existente")
+    @ApiResponses(value ={
+            @ApiResponse(responseCode = "200", description = "Paciente actualizado exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Paciente no encontrado")
+    })
     public ResponseEntity<Void> eliminar(@PathVariable Long id){
         Paciente paciente = pacienteService.obtenerPacientePorId(id);
         if (paciente == null) {

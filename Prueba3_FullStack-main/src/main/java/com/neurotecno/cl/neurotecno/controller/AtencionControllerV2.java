@@ -3,7 +3,12 @@ package com.neurotecno.cl.neurotecno.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -28,6 +33,7 @@ import com.neurotecno.cl.neurotecno.service.AtencionService;
 
 @RestController
 @RequestMapping("/api/v2/atenciones")
+@Tag(name = "Atenciones", description = "Operaciones relacionadas con las atenciones")
 public class AtencionControllerV2 {
 
     @Autowired
@@ -37,6 +43,7 @@ public class AtencionControllerV2 {
     private AtencionModelAssembler assembler;
 
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Obtener todas las atenciones", description = "Obtiene una lista de todas las atenciones")
     public CollectionModel<EntityModel<Atencion>> listar(){
         atencionService.obtenerAtenciones().stream().map(assembler::toModel);
         List<EntityModel<Atencion>> atenciones = atencionService.obtenerAtenciones().stream()
@@ -49,6 +56,7 @@ public class AtencionControllerV2 {
     }
     
     @GetMapping(value = "/{id}", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Buscar atencion", description = "Buscar una atención existente")
     public ResponseEntity<EntityModel<Atencion>> buscarAtencionPorId(@PathVariable Long id) {
         Atencion atencion = atencionService.obtenerAtencionPorId(id);
         if (atencion == null) {
@@ -58,7 +66,12 @@ public class AtencionControllerV2 {
     }
 
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<EntityModel<Atencion>> guardar(@RequestBody Atencion atencion) {
+    @Operation(summary = "Crear atencion", description = "Crear una atención")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atencion creada exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Atencion no encontrada")
+    })
+    public ResponseEntity<EntityModel<Atencion>> crearAtencion(@RequestBody Atencion atencion) {
         Atencion nuevaAtencion = atencionService.guardarAtencion(atencion);
         return ResponseEntity
                 .created(linkTo(methodOn(AtencionControllerV2.class).buscarAtencionPorId((long)(nuevaAtencion.getId()))).toUri())
@@ -66,6 +79,13 @@ public class AtencionControllerV2 {
     }
 
     @PutMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Actualizar atencion", description = "Actualizar una atención existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atencion actualizada exitosamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Atencion.class))),
+            @ApiResponse(responseCode = "404", description = "Atencion no encontrada")
+    })
     public ResponseEntity<EntityModel<Atencion>> actualizarAtencion (@PathVariable Long id,@RequestBody Atencion atencion) {
         atencion.setId(id.intValue());
         Atencion atencionActualizada = atencionService.guardarAtencion(atencion);
@@ -76,6 +96,13 @@ public class AtencionControllerV2 {
     }
 
     @PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Actualizar parcialmente una atencion", description = "Actualizar especificamente una atención")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atencion actualizada exitosamente",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Atencion.class))),
+            @ApiResponse(responseCode = "404", description = "Atencion no encontrada")
+    })
     public ResponseEntity<EntityModel<Atencion>> patchAtencion (@PathVariable Long id,@RequestBody Atencion atencion) {
         Atencion atencionActualizada = atencionService.editarAtencion(id, atencion);
         if (atencionActualizada == null) {
@@ -85,6 +112,11 @@ public class AtencionControllerV2 {
     }
 
     @DeleteMapping(value ="/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Eliminar atencion", description = "Eliminar una atención existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atencion eliminada exitosamente"),
+            @ApiResponse(responseCode = "404", description = "Atencion no encontrada")
+    })
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         Atencion atencion = atencionService.obtenerAtencionPorId(id);
         if(atencion == null){
