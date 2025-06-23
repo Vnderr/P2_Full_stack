@@ -1,5 +1,7 @@
 package com.neurotecno.cl.neurotecno.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -125,6 +127,63 @@ public class AtencionControllerV2 {
         atencionService.eliminarAtencion(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping(value = "/por-paciente/{pacienteId}", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener atenciones paciente", description = "obtener todas las atenciones en la que un paciente ha estado involucrado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atenciones encontradas"),
+            @ApiResponse(responseCode = "404", description = "No hay atenciones")
+    })
+    public ResponseEntity<List<Atencion>> BuscarAtencionesPorPacienteId(@PathVariable Long pacienteId) {
+        List<Atencion> atenciones = atencionService.obtenerAtencionesPorPacienteId(pacienteId);
+        if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(atenciones);
+    }
+
+    @GetMapping(value = "/por-medico/{medicoId}", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener atenciones medico", description = "obtener todas las atenciones en la que un medico ha estado involucrado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atenciones encontradas"),
+            @ApiResponse(responseCode = "404", description = "No hay atenciones")
+    })
+    public ResponseEntity<List<Atencion>> BuscarAtencionesPorMedico(@PathVariable Long medicoId) {
+        List<Atencion> atenciones = atencionService.obtenerAtencionesPorMedicoId(medicoId);
+        if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(atenciones);
+    }
+
+    @GetMapping(value = "/por-medico-paciente/{pacienteId}/{medicoId}", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener atenciones medico", description = "obtener todas las atenciones en la que un medico ha estado involucrado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atenciones encontradas"),
+            @ApiResponse(responseCode = "404", description = "el paciente y medico no han tenido ninguna atencion")
+    })
+    public ResponseEntity<List<Atencion>> BuscarAtencionesPorPacienteYMedico(@PathVariable Long pacienteId, @PathVariable Long medicoId) {
+        System.out.println(pacienteId);
+        System.out.println(medicoId);
+
+
+        List<Atencion> atenciones = atencionService.obtenerAtencionesPorPacienteIdYMedicoId(pacienteId,medicoId);
+        if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(atenciones);
+
+    }
+    /*
+    se me olvido como poner multiples tipos en un request que no sean integers, SIN usar clases de entidad :/
+
+    public ResponseEntity<List<Atencion>> BuscarAtencionesPorFechayHora(LocalDate fechaAtencion, LocalTime horaAtencion) {
+        List<Atencion> atenciones = atencionService.obtenerAtencionesPorFechayHora(fechaAtencion, horaAtencion);
+        if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(atenciones);
+    }
+
+    public ResponseEntity<List<Atencion>> BuscarAtencionesPorFechayMedicoID(LocalDate fechaAtencion, Long medicoId) {
+        List<Atencion> atenciones = atencionService.obtenerAtencionesPorFechayMedicoID(fechaAtencion, medicoId);
+        if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(atenciones);
+    }*/
+
 
 
 
