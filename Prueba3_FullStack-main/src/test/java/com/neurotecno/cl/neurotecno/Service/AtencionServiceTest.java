@@ -79,5 +79,47 @@ public class AtencionServiceTest {
         assertNotNull(updatedAtencion);
         assertEquals(15000, updatedAtencion.getCosto());
     }
+    @Test
+    public void testFindByPacienteId() {
+        Atencion ate = createAtencion();
+        List<Atencion> funciona = atencionService.obtenerAtencionesPorPacienteId(ate.getPaciente().getId().longValue());
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), ate);
+    }
+    @Test
+    public void testFindByMedicoId() {
+        Atencion ate = createAtencion();
+        List<Atencion> funciona = atencionService.obtenerAtencionesPorMedicoId(ate.getMedico().getId().longValue());
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), ate);
+    }
+
+    @Test
+    public void testFindByPacienteIdAndMedicoId() {
+        Atencion ate = createAtencion();
+        List<Atencion> funciona = atencionService.obtenerAtencionesPorPacienteIdYMedicoId(ate.getPaciente().getId().longValue(),ate.getMedico().getId().longValue());
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), ate);
+    }
+
+    @Test
+    public void testFindByFechaAtencionAndHoraAtencion() {
+        Atencion ate = createAtencion();
+        List<Atencion> funciona = atencionService.obtenerAtencionesPorFechayHora(ate.getFechaAtencion(), ate.getHoraAtencion());
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), ate);
+    }
+    @Test
+    public void testFindByFechayMedicoId() {
+        Atencion ate = createAtencion();
+        List<Atencion> funciona = atencionService.obtenerAtencionesPorFechayMedicoID(ate.getFechaAtencion(), ate.getMedico().getId().longValue());
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), ate);
+    }
 
 }

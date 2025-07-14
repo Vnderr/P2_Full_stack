@@ -93,6 +93,7 @@ public class AtencionService {
     public List<Atencion> obtenerAtencionesPorFechayHora(LocalDate fechaAtencion, LocalTime horaAtencion) {
         return atencionRepository.findByFechaAtencionAndHoraAtencion(fechaAtencion,horaAtencion);
     }
+
     public List<Atencion> obtenerAtencionesPorFechayMedicoID(LocalDate fechaAtencion, Long medicoId) {
         return atencionRepository.findByFechayMedicoId(fechaAtencion,medicoId);
     }

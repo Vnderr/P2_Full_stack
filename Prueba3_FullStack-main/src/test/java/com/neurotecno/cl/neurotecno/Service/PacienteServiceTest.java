@@ -1,5 +1,7 @@
 package com.neurotecno.cl.neurotecno.Service;
 
+import com.neurotecno.cl.neurotecno.model.Atencion;
+import com.neurotecno.cl.neurotecno.model.Medico;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,10 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import java.util.Date;
 import java.util.List;
@@ -41,6 +47,19 @@ public class PacienteServiceTest {
         "12345Abcdef",
         new TipoUsuario());
     }
+    private Atencion createAtencion(Paciente pac) {
+        return new Atencion(
+                1,
+                LocalDate.of(2025,7,1),
+                LocalTime.of(14, 30, 0),
+                0,
+                pac,
+                new Medico(),
+                new TipoUsuario(),
+                "nose");
+    }
+
+
 
     @Test
     public void testFindAll() {
@@ -87,4 +106,22 @@ public class PacienteServiceTest {
         pacienteService.eliminarPaciente(1L);
         verify(pacienteRepository, times(1)).deleteById(1L);
     }
+    @Test
+    public void testFindByTipoUsuario() {
+        Paciente pac = createPaciente();
+        List<Paciente> funciona = pacienteService.findByTipoUsuario(pac.getTipoUsuario()) ;
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), pac);
+    }
+    @Test
+    public void testFindByAtencionId() {
+        Paciente pac = createPaciente();
+        Atencion ate = createAtencion(pac);
+        List<Paciente> funciona = pacienteService.findByAtencion(ate);
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), pac);
+    }
+
 }

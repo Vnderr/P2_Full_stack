@@ -29,10 +29,10 @@ public interface AtencionRepository extends JpaRepository<Atencion, Long> {
 
     //@Query(value="SELECT * FROM ATENCION WHERE a.fecha_atencion = ?1 AND a.hora_atencion = ?2;",nativeQuery = true)
     List<Atencion> findByFechaAtencionAndHoraAtencion(LocalDate fechaAtencion, LocalTime horaAtencion);
-    
-    
-    @Query(value="SELECT * FROM ATENCION WHERE a.fecha_atencion = ?1 AND a.medico_id = ?2;",nativeQuery = true)
+
+    @Query(value="SELECT * FROM ATENCION a WHERE a.fecha_atencion = ?1 AND a.medico_id = ?2;",nativeQuery = true)
     List<Atencion> findByFechayMedicoId(LocalDate fechaAtencion,Long medicoId);
+
 
     void deleteByMedico (Medico medico);
     void deleteByPaciente (Paciente paciente);

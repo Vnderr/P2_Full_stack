@@ -1,10 +1,11 @@
 package com.neurotecno.cl.neurotecno.controller;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.neurotecno.cl.neurotecno.dataclasses.FechaHoraData;
+import com.neurotecno.cl.neurotecno.dataclasses.MedicoFechaData;
+import com.neurotecno.cl.neurotecno.dataclasses.MedicoPacienteData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,7 +31,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import com.neurotecno.cl.neurotecno.assemblers.AtencionModelAssembler;
 import com.neurotecno.cl.neurotecno.model.Atencion;
 import com.neurotecno.cl.neurotecno.service.AtencionService;
-
 
 
 @RestController
@@ -153,36 +153,46 @@ public class AtencionControllerV2 {
         return ResponseEntity.ok(atenciones);
     }
 
-    @GetMapping(value = "/por-medico-paciente/{pacienteId}/{medicoId}", produces =MediaTypes.HAL_JSON_VALUE)
-    @Operation(summary = "obtener atenciones medico", description = "obtener todas las atenciones en la que un medico ha estado involucrado")
+    @GetMapping(value = "/por-medico-paciente/", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener atenciones medico y paciente ", description = "obtener todas las atenciones en la que un medico ha estado involucrado")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Atenciones encontradas"),
             @ApiResponse(responseCode = "404", description = "el paciente y medico no han tenido ninguna atencion")
     })
-    public ResponseEntity<List<Atencion>> BuscarAtencionesPorPacienteYMedico(@PathVariable Long pacienteId, @PathVariable Long medicoId) {
-        System.out.println(pacienteId);
-        System.out.println(medicoId);
 
-
-        List<Atencion> atenciones = atencionService.obtenerAtencionesPorPacienteIdYMedicoId(pacienteId,medicoId);
-        if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(atenciones);
-
-    }
-    /*
-    se me olvido como poner multiples tipos en un request que no sean integers, SIN usar clases de entidad :/
-
-    public ResponseEntity<List<Atencion>> BuscarAtencionesPorFechayHora(LocalDate fechaAtencion, LocalTime horaAtencion) {
-        List<Atencion> atenciones = atencionService.obtenerAtencionesPorFechayHora(fechaAtencion, horaAtencion);
+    public ResponseEntity<List<Atencion>> BuscarAtencionesPorPacienteYMedico(@RequestBody MedicoPacienteData info) {
+        List<Atencion> atenciones = atencionService.obtenerAtencionesPorPacienteIdYMedicoId(info.getMedico().getId().longValue(),info.getPaciente().getId().longValue());
         if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(atenciones);
     }
 
-    public ResponseEntity<List<Atencion>> BuscarAtencionesPorFechayMedicoID(LocalDate fechaAtencion, Long medicoId) {
-        List<Atencion> atenciones = atencionService.obtenerAtencionesPorFechayMedicoID(fechaAtencion, medicoId);
+    @GetMapping(value = "/por-fecha-hora/", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener atenciones en fecha y hora", description = "obtener todas las atenciones en una fecha y hora")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atenciones encontradas"),
+            @ApiResponse(responseCode = "404", description = "no hay atenciones en esa fecha y/o hora.")
+    })
+    public ResponseEntity<List<Atencion>> BuscarAtencionesPorFechayHora(@RequestBody FechaHoraData datos) {
+        List<Atencion> atenciones = atencionService.obtenerAtencionesPorFechayHora(datos.getFechaAtencion(), datos.getHoraAtencion());
         if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(atenciones);
-    }*/
+    }
+
+
+    @GetMapping(value = "/por-medico-fecha/", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener atenciones en fecha y hora", description = "obtener todas las atenciones en una fecha y hora")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atenciones encontradas"),
+            @ApiResponse(responseCode = "404", description = "no hay atenciones en esa fecha y/o hora.")
+    })
+    public ResponseEntity<List<Atencion>> BuscarAtencionesPorFechayMedico(@RequestBody MedicoFechaData datos) {
+        System.out.println(datos.getFechaAtencion());
+        System.out.println(datos.getMedico());
+
+        List<Atencion> atenciones = atencionService.obtenerAtencionesPorFechayMedicoID(datos.getFechaAtencion(), datos.getMedico().getId().longValue());
+        if (atenciones.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(atenciones);
+    }
 
 
 

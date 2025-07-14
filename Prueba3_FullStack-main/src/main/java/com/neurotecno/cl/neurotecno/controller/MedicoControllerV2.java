@@ -3,6 +3,9 @@ package com.neurotecno.cl.neurotecno.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.neurotecno.cl.neurotecno.dataclasses.EspecialidadJefeData;
+import com.neurotecno.cl.neurotecno.model.Atencion;
+import com.neurotecno.cl.neurotecno.model.Paciente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -120,4 +123,31 @@ public class MedicoControllerV2 {
         medicoService.eliminarMedico(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(value ="/por-atencion", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "Buscar un medico", description = "Buscar un medico involucrado con una atencion")
+    public ResponseEntity<List<Medico>> obtenerPorAtencion(@RequestBody Atencion ate){
+        List<Medico> medicos = medicoService.obtenerPorIdAtencion(ate.getId().longValue());
+        if (medicos.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(medicos);
+    }
+
+    @GetMapping(value ="/por-especialidad/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener especialistas", description = "Buscar los medicos que tengan una especialidad")
+    public ResponseEntity<List<Medico>> obtenerPorEspecialidad(@PathVariable String especialidad){
+        List<Medico> medicos = medicoService.obtenerPorEspecialidad(especialidad);
+        if (medicos.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(medicos);
+    }
+
+    @GetMapping(value ="/por-jefe-esp/", produces = MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener especialistas con un jefe", description = "Buscar los medicos que tengan una especialidad y esten bajo un jefe")
+    public ResponseEntity<List<Medico>> buscarPorJefeTurnoYEspecialidad(@RequestBody EspecialidadJefeData datos){
+        List<Medico> medicos = medicoService.findByJefeTurnoAndEspecialidad(datos.getEspecialidad(), datos.getJefe());
+        if (medicos.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(medicos);
+    }
+
+
+
 }

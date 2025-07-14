@@ -8,8 +8,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
+import com.neurotecno.cl.neurotecno.model.Atencion;
+import com.neurotecno.cl.neurotecno.model.Paciente;
+import com.neurotecno.cl.neurotecno.model.TipoUsuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +40,17 @@ public class MedicoServiceTest {
         "123456Abcdef",
         "Psicologia infantil", 
         "Pedro Fuentes");
+    }
+    private Atencion createAtencion(Medico med) {
+        return new Atencion(
+                1,
+                LocalDate.of(2025,7,1),
+                LocalTime.of(14, 30, 0),
+                0,
+                new Paciente(),
+                med,
+                new TipoUsuario(),
+                "nose");
     }
 
     @Test
@@ -82,4 +98,34 @@ public class MedicoServiceTest {
         medicoService.eliminarMedico(1L);
         verify(medicoRepository, times(1)).deleteById(1L);
     }
+
+    @Test
+    public void testFindByEspecialidad() {
+        Medico med = createMedico();
+        List<Medico> funciona = medicoService.findByEspecialidad(med.getEspecialidad());
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), med);
+    }
+
+    @Test
+    public void testFindByJefeTurnoAndEspecialidad() {
+        Medico med = createMedico();
+        List<Medico> funciona = medicoService.findByJefeTurnoAndEspecialidad(med.getEspecialidad(),med.getJefeTurno());
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), med);
+    }
+    @Test
+    public void testFindByAtencionId() {
+        Medico med = createMedico();
+        Atencion ate = createAtencion(med);
+        List<Medico> funciona = medicoService.obtenerPorIdAtencion(ate.getId().longValue());
+        assertNotNull(funciona);
+        assertEquals(1,funciona.size());
+        assertEquals(funciona.get(0), med);
+    }
+
+
+
 }

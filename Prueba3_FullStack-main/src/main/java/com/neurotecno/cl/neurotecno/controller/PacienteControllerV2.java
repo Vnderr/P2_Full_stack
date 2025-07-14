@@ -3,6 +3,9 @@ package com.neurotecno.cl.neurotecno.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.neurotecno.cl.neurotecno.dataclasses.MedicoFechaData;
+import com.neurotecno.cl.neurotecno.model.Atencion;
+import com.neurotecno.cl.neurotecno.model.TipoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -129,4 +132,30 @@ public class PacienteControllerV2 {
             return ResponseEntity.noContent().build();
         
     }
+
+    @GetMapping(value = "/por-atencion/", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtener el paciente de una atencion", description = "obtener el paciente involucrado con una atencion")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "paciente encontrado"),
+    })
+    public ResponseEntity<List<Paciente>> buscarPorAtencion(@RequestBody Atencion ate) {
+        List<Paciente> pacientes = pacienteService.findByAtencion(ate);
+        if (pacientes.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(pacientes);
+    }
+
+
+    @GetMapping(value = "/por-tipo-usuario/", produces =MediaTypes.HAL_JSON_VALUE)
+    @Operation(summary = "obtiene a todos los usuarios de un tipo", description = "obtiene a todos los usuarios de un tipo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "pacientes encontrados"),
+            @ApiResponse(responseCode = "404", description = "no hay pacientes con ese tipo de usuario"),
+    })
+    public ResponseEntity<List<Paciente>> buscarPorTipoUsuario (@RequestBody TipoUsuario tipoUsuario) {
+        List<Paciente> pacientes = pacienteService.findByTipoUsuario(tipoUsuario);
+        if (pacientes.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(pacientes);
+    }
+
+
 }

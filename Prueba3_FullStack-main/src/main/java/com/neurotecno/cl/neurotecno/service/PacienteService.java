@@ -69,12 +69,12 @@ public class PacienteService {
     }
 
     public void  deleteById(Long id) {
-    Paciente paciente = pacienterepository.findById(id)
-    .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+        Paciente paciente = pacienterepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
 
-    atencionRepository.deleteByPaciente(paciente);
+        atencionRepository.deleteByPaciente(paciente);
 
-    pacienterepository.delete(paciente);
+        pacienterepository.delete(paciente);
     }
 
 
